@@ -1,0 +1,19 @@
+{
+	"name": "thefox/markdown2wordpress",
+	"description": "Post with Markdown to Wordpress.",
+	"license": "GPLv3",
+	"authors": [
+		{
+			"name": "Christian Mayer",
+			"email": "thefox21at@gmail.com",
+			"homepage": "http://fox21.at"
+		}
+	],
+	"minimum-stability": "beta",
+	"require": {
+		"php": ">=5.3",
+		"guzzle/guzzle": "3.7.*",
+		"symfony/yaml": "2.3.*",
+		"dflydev/markdown": "1.0.*"
+	}
+}

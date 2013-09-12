@@ -1,0 +1,12 @@
+{
+	"folders":[
+		{
+			"path": ".",
+			"name": "Markdown 2 WordPress",
+			"folder_exclude_patterns": [],
+			"file_exclude_patterns": [
+				"*.swp", "*.sublime-workspace", "*.lock"
+			]
+		}
+	]
+}

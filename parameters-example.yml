@@ -1,0 +1,7 @@
+wordpress:
+    api_url: 'https://public-api.wordpress.com/rest/v1'
+    site: YOU_SITE.wordpress.com
+    redirect_uri: 'http://fox21.at/oauth.php'
+    consumer_key: 
+    consumer_secret: 
+    token: 
