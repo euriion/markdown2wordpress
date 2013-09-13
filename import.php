@@ -12,6 +12,7 @@ use \dflydev\markdown\MarkdownExtraParser;
 
 $argTitle = '';
 $argFile = '';
+$argScriptogram = false;
 $argc = count($argv);
 for($argn = 1; $argn < $argc; $argn++){
 	$arg = $argv[$argn];
@@ -22,6 +23,9 @@ for($argn = 1; $argn < $argc; $argn++){
 	elseif($arg == '-f'){
 		$argn++;
 		$argFile = $argv[$argn];
+	}
+	elseif($arg == '-s'){
+		$argScriptogram = true;
 	}
 }
 
@@ -58,12 +62,40 @@ $date = new DateTime('now', new DateTimeZone('Europe/Vienna'));
 $markdownParser = new MarkdownExtraParser();
 $client = new Client();
 
+$content = '';
+if($fh = fopen($argFile, 'r')){
+	$isHeader = true;
+	$n = 0;
+	while(!feof($fh)){
+		$row = fgets($fh, 4096);
+		$row = str_replace("\n", '', $row);
+		#print "row: '$row'\n";
+		if($isHeader){
+			if($row == ''){
+				$isHeader = false;
+			}
+		}
+		else{
+			if($n <= 5){
+				if($row != ''){
+					$content .= $row."\n";
+				}
+			}
+			else{
+				$content .= $row."\n";
+			}
+		}
+		$n++;
+	}
+	fclose($fh);
+}
+
 $request = $client->post($paramters['wordpress']['api_url'].'/sites/'.$paramters['wordpress']['site'].'/posts/new');
 $request->addHeader('Authorization', 'Bearer '.$paramters['wordpress']['token']);
 
 $request->setPostField('date', $date->format(DateTime::ISO8601));
 $request->setPostField('title', $argTitle);
-$request->setPostField('content', $markdownParser->transformMarkdown(file_get_contents($argFile)));
+$request->setPostField('content', $markdownParser->transformMarkdown($content));
 $request->setPostField('status', 'publish');
 $request->setPostField('format', 'standard');
 #$request->setPostField('format', 'link');
