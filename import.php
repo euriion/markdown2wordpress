@@ -62,6 +62,11 @@ $date = new DateTime('now', new DateTimeZone('Europe/Vienna'));
 $markdownParser = new MarkdownExtraParser();
 $client = new Client();
 
+# TODO:
+#$date = '';
+#$tags = '';
+#$isLink = false;
+
 $content = '';
 if($fh = fopen($argFile, 'r')){
 	$isHeader = true;
@@ -99,6 +104,7 @@ $request->setPostField('content', $markdownParser->transformMarkdown($content));
 $request->setPostField('status', 'publish');
 $request->setPostField('format', 'standard');
 #$request->setPostField('format', 'link');
+#$request->setPostField('tags', $tags);
 
 try{
 	print "post file '".$argFile."'  ".$date->format(DateTime::ISO8601)." ... ";
