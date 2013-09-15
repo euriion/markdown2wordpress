@@ -1,7 +1,5 @@
 <?php
 
-date_default_timezone_set('Europe/Vienna');
-
 if(PHP_SAPI != 'cli') die('ERROR: You must run this script under shell.');
 
 include_once __DIR__.'/bootstrap.php';
@@ -30,7 +28,7 @@ for($argn = 1; $argn < $argc; $argn++){
 }
 
 if(!$argFile){
-	print "Usage: ".$argv[0]." -f post.md\n";
+	print "Usage: ".$argv[0]." -t 'hello world' -f post.md [-s]\n";
 	exit(1);
 }
 
@@ -57,15 +55,15 @@ if(
 }
 
 
-#$date = new DateTime('now');
-$date = new DateTime('now', new DateTimeZone('Europe/Vienna'));
+$dtzone = new DateTimeZone('Europe/Vienna');
+$date = new DateTime('now', $dtzone);
 $markdownParser = new MarkdownExtraParser();
 $client = new Client();
 
-# TODO:
-#$date = '';
-#$tags = '';
-#$isLink = false;
+$tags = '';
+$link = '';
+$error = 0;
+
 
 $content = '';
 if($fh = fopen($argFile, 'r')){
@@ -78,6 +76,15 @@ if($fh = fopen($argFile, 'r')){
 		if($isHeader){
 			if($row == ''){
 				$isHeader = false;
+			}
+			elseif(strtolower(substr($row, 0, 6)) == 'date: '){
+				$date = new DateTime(substr($row, 7), $dtzone);
+			}
+			elseif(strtolower(substr($row, 0, 6)) == 'tags: '){
+				$tags = substr($row, 7);
+			}
+			elseif(strtolower(substr($row, 0, 6)) == 'link: '){
+				$link = substr($row, 7);
 			}
 		}
 		else{
@@ -102,12 +109,17 @@ $request->setPostField('date', $date->format(DateTime::ISO8601));
 $request->setPostField('title', $argTitle);
 $request->setPostField('content', $markdownParser->transformMarkdown($content));
 $request->setPostField('status', 'publish');
-$request->setPostField('format', 'standard');
-#$request->setPostField('format', 'link');
-#$request->setPostField('tags', $tags);
+$request->setPostField('tags', $tags);
+
+if($link){
+	$request->setPostField('format', 'link');
+}
+else{
+	$request->setPostField('format', 'standard');
+}
 
 try{
-	print "post file '".$argFile."'  ".$date->format(DateTime::ISO8601)." ... ";
+	print "post file '".$argFile."'  ".$date->format(DateTime::ISO8601)." ".($link ? 'link' : '')." ... ";
 	$response = $request->send();
 	$data = $response->json();
 	if($data && isset($data['ID'])){
@@ -115,10 +127,13 @@ try{
 	}
 	else{
 		print 'FAILED';
+		$error++;
 	}
 	print "\n";
 }
 catch(Exception $e){
 	print "ERROR: ".$e->getMessage()."\n";
-	exit(1);
+	$error++;
 }
+
+exit((int)($error != 0));

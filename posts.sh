@@ -6,6 +6,6 @@ for file in posts/*; do
 	
 	#echo "file: '$file', title '$title'"
 	php import.php -t "$title" -f $file -s && mv $file posted
-	sleep 5
+	sleep 1
 	
 done
