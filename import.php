@@ -78,13 +78,13 @@ if($fh = fopen($argFile, 'r')){
 				$isHeader = false;
 			}
 			elseif(strtolower(substr($row, 0, 6)) == 'date: '){
-				$date = new DateTime(substr($row, 7), $dtzone);
+				$date = new DateTime(substr($row, 6), $dtzone);
 			}
 			elseif(strtolower(substr($row, 0, 6)) == 'tags: '){
-				$tags = substr($row, 7);
+				$tags = substr($row, 6);
 			}
 			elseif(strtolower(substr($row, 0, 6)) == 'link: '){
-				$link = substr($row, 7);
+				$link = substr($row, 6);
 			}
 		}
 		else{
@@ -101,6 +101,7 @@ if($fh = fopen($argFile, 'r')){
 	}
 	fclose($fh);
 }
+
 
 $request = $client->post($paramters['wordpress']['api_url'].'/sites/'.$paramters['wordpress']['site'].'/posts/new');
 $request->addHeader('Authorization', 'Bearer '.$paramters['wordpress']['token']);
@@ -119,7 +120,7 @@ else{
 }
 
 try{
-	print "post file '".$argFile."'  ".$date->format(DateTime::ISO8601)." ".($link ? 'link' : '')." ... ";
+	print "post file '".$argFile."'  ".$date->format('Y-m-d H:i:s')." ".($link ? 'link' : '')." ... ";
 	$response = $request->send();
 	$data = $response->json();
 	if($data && isset($data['ID'])){
