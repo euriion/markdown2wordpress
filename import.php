@@ -60,6 +60,7 @@ $date = new DateTime('now', $dtzone);
 $markdownParser = new MarkdownExtraParser();
 $client = new Client();
 
+$categories = array('News', 'Article', 'Post');
 $tags = '';
 $link = '';
 $error = 0;
@@ -102,22 +103,30 @@ if($fh = fopen($argFile, 'r')){
 	fclose($fh);
 }
 
+$contentHtml = $markdownParser->transformMarkdown($content);
+
 
 $request = $client->post($paramters['wordpress']['api_url'].'/sites/'.$paramters['wordpress']['site'].'/posts/new');
 $request->addHeader('Authorization', 'Bearer '.$paramters['wordpress']['token']);
 
-$request->setPostField('date', $date->format(DateTime::ISO8601));
-$request->setPostField('title', $argTitle);
-$request->setPostField('content', $markdownParser->transformMarkdown($content));
-$request->setPostField('status', 'publish');
-$request->setPostField('tags', $tags);
-
 if($link){
 	$request->setPostField('format', 'link');
+	
+	$categories[] = 'Link';
+	$categories[] = 'URL';
+	
+	$contentHtml = '<p><a href="'.$link.'">'.$link.'</a></p>'.$contentHtml;
 }
 else{
 	$request->setPostField('format', 'standard');
 }
+
+$request->setPostField('date', $date->format(DateTime::ISO8601));
+$request->setPostField('title', $argTitle);
+$request->setPostField('content', $contentHtml);
+$request->setPostField('status', 'publish');
+$request->setPostField('categories', $categories);
+$request->setPostField('tags', $tags);
 
 try{
 	print "post file '".$argFile."'  ".$date->format('Y-m-d H:i:s')." ".($link ? 'link' : '')." ... ";
