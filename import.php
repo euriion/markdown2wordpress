@@ -27,8 +27,8 @@ for($argn = 1; $argn < $argc; $argn++){
 	}
 }
 
-if(!$argFile){
-	print "Usage: ".$argv[0]." -t 'hello world' -f post.md [-s]\n";
+if(!$argTitle || !$argFile){
+	print "Usage: ".$argv[0]." -t TITLE -f FILE [-s]\n";
 	exit(1);
 }
 
