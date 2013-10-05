@@ -5,10 +5,10 @@ date_default_timezone_set('Europe/Vienna');
 if(PHP_SAPI != 'cli') die('ERROR: You must run this script under shell.');
 
 include_once __DIR__.'/bootstrap.php';
-use \Symfony\Component\Yaml\Yaml;
-use \Guzzle\Http\Client;
-use \dflydev\markdown\MarkdownParser;
-use \dflydev\markdown\MarkdownExtraParser;
+use Symfony\Component\Yaml\Yaml;
+use Guzzle\Http\Client;
+use dflydev\markdown\MarkdownParser;
+use dflydev\markdown\MarkdownExtraParser;
 
 $argTitle = '';
 $argFile = '';

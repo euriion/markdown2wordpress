@@ -4,8 +4,8 @@ if(PHP_SAPI != 'cli') die('ERROR: You must run this script under shell.');
 
 include_once __DIR__.'/bootstrap.php';
 
-use \Symfony\Component\Yaml\Yaml;
-use \Guzzle\Http\Client;
+use Symfony\Component\Yaml\Yaml;
+use Guzzle\Http\Client;
 
 $argCode = '';
 $argc = count($argv);
