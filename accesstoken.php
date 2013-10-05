@@ -17,7 +17,7 @@ for($argn = 1; $argn < $argc; $argn++){
 	}
 }
 
-$paramtersFilePath = 'parameters.yml';
+$paramtersFilePath = __DIR__.'/parameters.yml';
 if(!file_exists($paramtersFilePath)){
 	die('ERROR: File "'.$paramtersFilePath.'" not found.'."\n");
 }
@@ -70,7 +70,7 @@ else{
 			
 			$paramters = Yaml::parse($paramtersFilePath);
 			$paramters['wordpress']['token'] = $data['access_token'];
-			file_put_contents(__DIR__.'/'.$paramtersFilePath, Yaml::dump($paramters));
+			file_put_contents($paramtersFilePath, Yaml::dump($paramters));
 		}
 		else{
 			print "ERROR: could not get token\n";

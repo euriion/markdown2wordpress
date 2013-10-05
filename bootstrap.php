@@ -10,7 +10,7 @@ if(function_exists('pcntl_signal')){
 	pcntl_signal(SIGINT, 'signalHandler');
 }
 
-$paramtersFilePath = 'parameters.yml';
+$paramtersFilePath = __DIR__.'/parameters.yml';
 if(!file_exists($paramtersFilePath)){
 	print "ERROR: please set up ".$paramtersFilePath."\n";
 	
@@ -25,6 +25,6 @@ if(!file_exists($paramtersFilePath)){
 		),
 	);
 	
-	file_put_contents(__DIR__.'/'.$paramtersFilePath, Yaml::dump($paramters));
+	file_put_contents($paramtersFilePath, Yaml::dump($paramters));
 	exit(1);
 }
