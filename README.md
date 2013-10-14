@@ -1,8 +1,6 @@
 # HTML to Markdown
 Post a `.md`-file to a [WordPress](http://wordpress.com/) site.
 
-Visit [fox21.at](http://fox21.at).
-
 ## Markdown documentation
 <http://daringfireball.net/projects/markdown/>
 
